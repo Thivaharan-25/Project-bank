@@ -1,13 +1,43 @@
 def datetimeprinter():
+    # import datetime
+    # date = datetime.datetime.now()
+    # return date
     import datetime
-    date = datetime.datetime.now()
-    return date
+    x = datetime.datetime.now()
+    print(x)
 
 def userid():
     count = 000
     while True:
         count += 1
         return count
+def get_Customer_details():
+    user_name = input ("Enter User Name: ")
+    userid()
+    user_password =input ("Enter User Password")
+    datetimeprinter()
+    amount = int (input ("Enter Deposit Amount: "))
+    try:
+        if amount <= 0:
+            print ("Deposit Amount should be Greater than 0")
+        elif amount > 0:
+            balance = amount
+            print (f'Deposit Successful. New Balance: {balance}')
+        else:
+            print ("invalid")
+    except ValueError:
+            print('Amount should be in number')
+    user_account[userid] = {'username':user_name ,'password': user_password , 'Balance': balance}
+    with open ('user.txt','a') as userfile : 
+        userfile.write (f'User_name: {user_name}\t')
+        userfile.write (f'User_ID: {userid}\t')
+        userfile.write (f'User_Password: {user_password}\t')
+        userfile.write ('\n')
+    with open ("transaction.txt", "a") as transaction_file :
+        transaction_file.write (f'Initial Balance: {amount}\t')
+        transaction_file.write (f'{datetimeprinter}\t')
+        file.write ('\n')
+
 
 def deposit():
     amount = int (input ("Enter Deposit Amount: "))
@@ -85,32 +115,17 @@ try:
             choice = input ("Enter a Number between 1 to 6 : ")
             try:
                 if choice == '1':
-                    file = open ('user.txt','a') 
-                    user_name = input ("Enter User Name: ")
-                    userid()
-                    user_password =input ("Enter User Password")
-                    datetimeprinter()
-                    amount = int (input ("Enter Deposit Amount: "))
-                    try:
-                        if amount <= 0:
-                            print ("Deposit Amount should be Greater than 0")
-                        elif amount > 0:
-                            balance = amount
-                            print (f'Deposit Successful. New Balance: {balance}')
-                        else:
-                            print ("invalid")
-                    except ValueError:
-                        print("Amount should be Only in Numbers")
+                    get_Customer_details()
+                    # with open ('user.txt','a') as userfile , open ("transaction.txt", "a")as transactionfile:
+                    # # user_account[userid] = {'username':user_name , 
+                    # # 'password': user_password , 'Balance': balance}
+                    #     userfile.write (f'User_name: {user_name}\t')
+                    #     userfile.write (f'User_ID: {userid}\t')
+                    #     userfile.write (f'User_Password: {user_password}\t')
+                    #     transactionfile.write (f'Initial Balance: {amount}\t')
+                    #     transactionfile.write (f'{datetimeprinter}\t')
+                    #     file.write ('\n')
                     
-                    user_account[userid] = {'username':user_name , 
-                    'password': user_password , 'Balance': balance}
-                    file.write (f'User_name: {user_name}\t')
-                    file.write (f'User_ID: {userid}\t')
-                    file.write (f'User_Password: {user_password}\t')
-                    file.write (f'Initial Balance: {deposit}\t')
-                    file.write (f'{datetimeprinter}\t')
-                    file.write ('\n')
-                    file.close()
                 elif choice == '2':
                     file = open ('transaction.txt', 'a')
                     datetimeprinter()
