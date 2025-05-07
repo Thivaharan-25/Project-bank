@@ -1,77 +1,146 @@
 def datetimeprinter():
-    # import datetime
-    # date = datetime.datetime.now()
-    # return date
     import datetime
-    x = datetime.datetime.now()
-    print(x)
+    now = datetime.datetime.now()
+    dt_string = now.strftime ("%Y-%m-%d %H:%M:%S")
+    with open ("transaction.txt", "a") as transaction_file :
+        transaction_file.write (f'Transcation Date and Time: {dt_string}\t')
+        transaction_file.write('\n')
 
-def userid():
-    count = 000
-    while True:
+def customer_id_generation(prefix_letter, counter_file):
+    try:
+        with open(counter_file, 'r') as file:
+            count = int(file.read().strip())
+    except FileNotFoundError:
+        count = 0 
+
+    def generate_user_id():
+        nonlocal count
         count += 1
-        return count
+        user_id = f"{prefix_letter}{str(count).zfill(3)}"  
+
+        
+        with open(counter_file, 'w') as file:
+            file.write(str(count))
+
+        return user_id
+
+    return generate_user_id
+
+    
 def get_Customer_details():
-    user_name = input ("Enter User Name: ")
-    userid()
-    user_password =input ("Enter User Password")
+    user_name = input("Enter User Name: ")
+    generator = customer_id_generation('C', 'user_counter.txt') 
+    user_id = generator() 
+    print(f"Your Unique User ID: {user_id}") 
+
+    user_password = input("Enter User Password: ")
     datetimeprinter()
-    amount = int (input ("Enter Deposit Amount: "))
+    amount = int(input("Enter Deposit Amount: "))
+
     try:
         if amount <= 0:
-            print ("Deposit Amount should be Greater than 0")
+            print("Deposit Amount should be Greater than 0")
         elif amount > 0:
             balance = amount
-            print (f'Deposit Successful. New Balance: {balance}')
+            print(f'Deposit Successful. New Balance: {balance}')
         else:
-            print ("invalid")
+            print("Invalid deposit amount")
     except ValueError:
-            print('Amount should be in number')
-    user_account[userid] = {'username':user_name ,'password': user_password , 'Balance': balance}
-    with open ('user.txt','a') as userfile : 
-        userfile.write (f'User_name: {user_name}\t')
-        userfile.write (f'User_ID: {userid}\t')
-        userfile.write (f'User_Password: {user_password}\t')
-        userfile.write ('\n')
-    with open ("transaction.txt", "a") as transaction_file :
-        transaction_file.write (f'Initial Balance: {amount}\t')
-        transaction_file.write (f'{datetimeprinter}\t')
-        file.write ('\n')
+        print('Amount should be a number')
+
+    
+    user_account[user_id] = {'username': user_name, 'password': user_password, 'balance': balance}
+    with open('customer.txt', 'a') as customer_file:
+        customer_file.write(f'User_ID: {user_id},')
+        customer_file.write(f'User_Name: {user_name},')
+        customer_file.write(f'User_Password: {user_password},')
+        customer_file.write(f'Balance: {balance}\n')
+    with open("transaction.txt", "a") as transaction_file:
+        transaction_file.write(f'User ID: {user_id}, Initial Balance: {amount},')
+        datetimeprinter()
+        transaction_file.write('\n')
 
 
 def deposit():
-    amount = int (input ("Enter Deposit Amount: "))
+    user_id = input("Enter your User ID: ")
+    password = input("Enter your Password: ")
+
+    balance = user_id_checker(user_id, password)
+
+    if balance is None:
+        print("Incorrect user ID or password.")
+        return 
     try:
+        amount = int (input ("Enter Deposit Amount: "))
         if amount <= 0:
             print ("Deposit Amount should be Greater than 0")
         elif amount > 0:
             balance += amount
             print (f'Deposit Successful. New Balance: {balance}')
+            return user_id,balance
         else:
             print ("invalid")
     except ValueError:
         print("Amount should be Only in Numbers")
 
-def withdraw():
-    amount = int (input ("Enter Your Withdrawal Amount: "))
+def user_id_checker(user_id, password):
     try:
+        with open('customer.txt', 'r') as file:
+            for line in file:
+                user_data = line.strip().split(',')
+                if user_data[0] == user_id and user_data[2] == password:
+                    return float(user_data[3]) 
+    except FileNotFoundError: 
+        print("User data file not found.")
+    return None 
+
+def withdraw():
+    user_id = input("Enter your User ID: ")
+    password = input("Enter your Password: ")
+
+    balance = user_id_checker(user_id, password)
+
+    if balance is None:
+        print("Incorrect user ID or password.")
+        return 
+
+    try:
+        amount = int(input("Enter Your Withdrawal Amount: "))
         if amount > balance:
-            print ("Withdrawal Failed. Withdrawal amount cannot be greater than balance")
-            print (f'Your Current Balance: {balance}')
+            print("Withdrawal Failed. Withdrawal amount cannot be greater than balance")
+            print(f"Your Current Balance: {balance}")
         elif amount <= 0:
-            print ("Withdrawal amount should be Greater than 0")
+            print("Withdrawal amount should be greater than 0")
         elif amount <= balance:
             balance -= amount
-            print (f"your current Balance: {balance}")
+            print(f"Your current Balance: {balance}")
+
+            with open('customer.txt', 'r') as file:
+                lines = file.readlines()
+            
+            with open('users.txt', 'w') as file:
+                for line in lines:
+                    user_data = line.strip().split(',')
+                    if user_data[0] == user_id:
+                        file.write(f"{user_id},{password},{balance}\n")
+                    else:
+                        file.write(line)
+
+            with open('transaction.txt', 'a') as file:
+                file.write(f'{user_id} Withdrawal amount: {amount}\t')
+                datetimeprinter()
+                file.write(f'{amount}\t')
+                file.write('\n')
+            return user_id,balance
         else:
-            print ("insifficent fund")
+            print("Insufficient funds.")
     except ValueError:
-        print('Amount should be in number')
+        print("Amount should be a number.")
 
 def account_balance_check():
-    userid = input ("enter Your ID to Check Balance: ")
-    if userid in user_account:
-        check = userid.get ('balance')
+    user_id = input ("enter Your ID to Check Balance: ")
+    if user_id in user_account:
+        check = user_id.get ('balance')
         print (f'Your Curreent Balance is : {check}')
     else:
         print ('Customer Account NOT Found')
@@ -127,25 +196,24 @@ try:
                     #     file.write ('\n')
                     
                 elif choice == '2':
-                    file = open ('transaction.txt', 'a')
                     datetimeprinter()
-                    deposit()
-                    user_account[userid]['balance'] = balance
-                    file.write(f'{userid} deposit amount: {amount}\t')
-                    file.write(f'{deposit}\t')
-                    file.write (f'{datetimeprinter}\t')
-                    file.write('\n')
-                    file.close()
+                    result = deposit()
+                    if result:
+                        user_id, balance = result
+                        user_account[user_id] = {'balance': balance}
+                        with open("transaction.txt", 'a') as file:
+                            file.write(f'{user_id} deposit amount: {balance}\n')
+
                 elif choice == '3':
-                    file = open ('transaction.txt', 'a')
                     datetimeprinter()
-                    withdraw()
-                    user_account[userid]['balance'] = balance
-                    file.write (f'{userid} Withdrawal amount: {amount}\t')
-                    file.write (f'Transaction Date And Time: {datetimeprinter}\t')
-                    file.write (f'{withdraw}\t')
-                    file.write('\n')
-                    file.close()
+                    result = withdraw()
+                    if result:
+                        user_id, balance = result
+                        user_account[user_id] = {'balance': balance}
+                        with open("transaction.txt", 'a') as file:
+                            file.write(f'{user_id} Withdrawal amount: {balance}\n')
+
+                        
                 elif choice == '4':
                     account_balance_check()
                 elif choice == '5':
@@ -171,25 +239,22 @@ try:
                 if choice == '1':
                     account_balance_check()
                 elif choice == '2':
-                        file = open ('transaction.txt', 'a')
-                        datetimeprinter()
-                        deposit()
-                        user_account[userid]['balance'] = balance
-                        file.write(f'{userid} deposit amount: {amount}\t')
-                        file.write(f'{deposit}\t')
-                        file.write (f'{datetimeprinter}\t')
-                        file.write('\n')
-                        file.close() 
+                    datetimeprinter()
+                    result = deposit()
+                    if user_id and balance is not None:
+                        user_account[user_id] = {'balance': balance}
+                        with open("transaction.txt", 'a') as file:
+                            file.write(f'{user_id} deposit amount: {balance}\n')
+
                 elif choice == '3':
-                        file = open ('transaction.txt', 'a')
-                        datetimeprinter()
-                        withdraw()
-                        user_account[userid]['balance'] = balance
-                        file.write (f'{userid} Withdrawal amount: {amount}\t')
-                        file.write (f'Transaction Date And Time: {datetimeprinter}\t')
-                        file.write (f'{withdraw}\t')
-                        file.write('\n')
-                        file.close()
+                    datetimeprinter()
+                    result = withdraw()
+                    if result:
+                        user_id, balance = result
+                        user_account[user_id] = {'balance': balance}
+                        with open("transaction.txt", 'a') as file:
+                            file.write(f'{user_id} Withdrawal amount: {balance}\n')
+
                 elif choice == '4':
                     print ('Thank You For Using Our Bank Service💖')
                     break

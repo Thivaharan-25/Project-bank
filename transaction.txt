@@ -1,0 +1,26 @@
+Initial Balance: 25000	<function datetimeprinter at 0x0000027E126F1440>	Initial Balance: 10000	Transcation Date and Time: None	Initial Balance: 10000	Transcation Date and Time: 2025-05-07 09:38:37	Initial Balance: 10000	Transcation Date and Time: 2025-05-07 10:06:17	Initial Balance: 1889977	Transcation Date and Time: 2025-05-07 10:07:15	Transcation Date and Time: 2025-05-07 10:07:18	Initial Balance: 10000	Transcation Date and Time: 2025-05-07 10:15:23	
+Transcation Date and Time: 2025-05-07 10:15:28	
+Initial Balance: 40000	Transcation Date and Time: 2025-05-07 10:17:11	
+Transcation Date and Time: 2025-05-07 10:17:14	
+Initial Balance: 3000	Transcation Date and Time: 2025-05-07 10:20:15	
+Transcation Date and Time: 2025-05-07 10:21:00	
+Transcation Date and Time: 2025-05-07 10:21:03	
+Initial Balance: 100000	Transcation Date and Time: 2025-05-07 11:01:13	
+Transcation Date and Time: 2025-05-07 11:01:18	
+Initial Balance: 100008	Transcation Date and Time: 2025-05-07 11:10:50	
+Transcation Date and Time: 2025-05-07 11:11:34	
+Transcation Date and Time: 2025-05-07 11:11:37	
+Initial Balance: 10000	Transcation Date and Time: 2025-05-07 11:38:01	
+Transcation Date and Time: 2025-05-07 11:38:06	
+Initial Balance: 10000	Transcation Date and Time: 2025-05-07 11:49:27	
+Transcation Date and Time: 2025-05-07 11:50:15	
+Transcation Date and Time: 2025-05-07 11:50:19	
+Initial Balance: 100000	Transcation Date and Time: 2025-05-07 12:23:30	
+Transcation Date and Time: 2025-05-07 12:23:36	
+User ID: U001 Initial Balance: 10000	
+Transcation Date and Time: 2025-05-07 12:28:09	
+Transcation Date and Time: 2025-05-07 12:28:16	
+User ID: U003 Initial Balance: 10000000	
+Transcation Date and Time: 2025-05-07 12:38:00	
+Transcation Date and Time: 2025-05-07 12:38:07	
+User ID: U004 Initial Balance: 200000000	
