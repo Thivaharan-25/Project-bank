@@ -25,6 +25,25 @@ def customer_id_generation(prefix_letter, counter_file):
 
     return generate_user_id
 
+# def check_admin():
+#     try:
+#         with open('Admin.txt', 'r') as file:
+#             for line in file:
+#                 user_data = line.strip().split(',')
+#                 if user_data[0] == admin and user_data[1] == adminpassword:
+#                     print ("\nlogin successful😊\n")
+#                     break
+#             else:
+#                 print ("\nLogin failed... try again😞\n")
+#         with open ("Admin.txt","a") as file:
+#             file.write (f'{admin},')
+#             file.write (f'{adminpassword}\t')
+#             file.write ("\n")
+#             file.close()
+#     except FileNotFoundError: 
+#         print("User data file not found.")
+
+
 
 def update_user_balance_file(user_id, password, new_balance):
     try:
@@ -99,7 +118,7 @@ def deposit():
             update_user_balance_file(user_id, password, balance)
 
             with open('transaction.txt', 'a') as file:
-                file.write(f'{user_id}\t| Deposit amount\t| {amount}|\t')
+                file.write(f'{user_id}\t| Deposit amount\t| {amount}\t|')
                 datetimeprinter()
                 file.write('\n')
 
@@ -147,7 +166,7 @@ def withdraw():
             update_user_balance_file(user_id, password, balance)
 
             with open('transaction.txt', 'a') as file:
-                file.write(f'{user_id}\t| Withdrawal amount\t| {amount}|\t')
+                file.write(f'{user_id}\t| Withdrawal amount\t| {amount}\t|')
                 datetimeprinter()
                 file.write('\n')
             return user_id, balance,amount
@@ -168,7 +187,11 @@ def account_balance_check():
             print("❌ Incorrect user ID or password.")
     except FileNotFoundError:
         print("❌ User file not found.")
-        
+
+
+with open ('Admin.txt', 'a') as file:
+        file.write('A000,1999')
+        file.write("\n")      
 user_account = {}
 print ("\n HINA BANK \n")
 
@@ -177,24 +200,56 @@ print("2.Customer Login")
 choice = input ("choose a Number between 1 and 2 : ")
 try:
     if choice == '1':
-        print ("adminid = 1010  admin password = Thivah200425")
-        Admin_account = {'adminid': '1010', 'password' : 'Thivah200425'}
-        while True:
-            print ("\n====Login====\n")
-            admin = (input ('Enter Admin name : '))
-            adminpassword = (input ('Enter Admin Password: '))
-            if admin == Admin_account['adminid'] and adminpassword == Admin_account['password']:
+        print("adminid = A000  admin password = 1999")
+        max_attempts = 5
+        attempt = 0
+        
+        while attempt < max_attempts:
+            print("\n==== Admin Login ====")
+            admin_id = input("Enter Admin ID: ")
+            admin_password = input("Enter Admin Password: ")
+        #     try:
+        #         with open ('Admin.txt','r') as file:
+        #             lines = file.readlines
+        #     except FileNotFoundError:
+        #         lines = []
+        #         found = False
+        #         for line in lines:
+        #             if "A000" in line:
+        #                 found = True
+        #                 break
+        #             else:
+        #                 with open ('Admin.txt','a') as file:
+        #                     file.write(f'A000,1999')
+            
+            with open ('Admin.txt', 'r') as file:
+                for line in file:
+                    admin_data = line.strip().split(',')
+                    if admin_data[0] == admin_id and admin_data[1] == admin_password:
+                        print("\nLogin successful😊")
+                        break
+                else:
+                    
+                    attempt += 1
+                    print(f"\nLogin failed... {max_attempts - attempt} attempts remaining😞\n")
+        
+            if attempt < max_attempts:  
+                break
+            if attempt == max_attempts:
+                print("You have been locked out due to too many failed login attempts.")
+                break
+            #if admin == Admin_account['adminid'] and adminpassword == Admin_account['password']:
             # if admin in Admin_account :
             #     check = admin.get('adminid') and adminpassword.get('password')
-                print ("\nlogin successful😊\n")
-                break
-            else:
-                print ("\nLogin failed... try again😞\n")
-        with open ("Admin.txt","a") as file:
-            file.write (f'AdminID= {admin}\t')
-            file.write (f'Admin_password= {adminpassword}\t')
-            file.write ("\n")
-            file.close()
+        #         print ("\nlogin successful😊\n")
+        #         break
+        #     else:
+        #         print ("\nLogin failed... try again😞\n")
+        # with open ("Admin.txt","a") as file:
+        #     file.write (f'{admin},')
+        #     file.write (f'Admin_password= {adminpassword}\t')
+        #     file.write ("\n")
+        #     file.close()
         while True:
             print ("\n=== MINI BANK SYSTEM ===\n")
             print ("1.create Account")
@@ -202,9 +257,10 @@ try:
             print ("3.Withdraw Money")
             print ("4.Check Balance")
             print ("5.Transaction History")
-            print ("6.Exit")
+            print ('6.Add New Admin')
+            print ("7.Exit")
 
-            choice = input ("Enter a Number between 1 to 6 : ")
+            choice = input ("Enter a Number between 1 to 7 : ")
             try:
                 if choice == '1':
                     get_Customer_details()
@@ -241,15 +297,23 @@ try:
                     account_balance_check()
                 elif choice == '5':
                     try:
-                        print("=========================================================================================")
-                        print("                      DATE & TIME           |  USER_ID  |       TYPE            | AMOUNT|")
-                        print('=========================================================================================')
+                        print("=============================================================================================")
+                        print("                      DATE & TIME           |  USER_ID  |       TYPE            |   AMOUNT  |")
+                        print('=============================================================================================')
                         file = open ('transaction.txt')
                         print (file.read())
-                        print("========================================================================================")
+                        print("============================================================================================")
                     except FileNotFoundError:
                         print ('Transaction File Not Found')
-                elif choice == '6':
+                elif choice == "6":
+                    generator = customer_id_generation('A', 'Admin_counter.txt')
+                    new_admin_id = generator
+                    Password = input ('Enter Admin Password: ')
+                    with open ('Admin.txt', 'a') as file:
+                        file.write (f'{generator},{password}')
+                        print(f'New Admin ID:{user_id}')
+                        print(f"Admin password:{password}")
+                elif choice == '7':
                     print ("Thank You For Using Our Bank Service💖")
                     break
                 else:
@@ -257,15 +321,16 @@ try:
             except ValueError:
                 print ('Choice should be in Number')
 
+
     elif choice == '2':
         while True:
-            print ('1.Check balance')
-            print ('2.Deposit Money')
-            print ('3.Withdraw Money')
-            print ('4.Exit')
-            
+            print('1. Check balance')
+            print('2. Deposit Money')
+            print('3. Withdraw Money')
+            print('4. Exit')
+
             print('\n')
-            choice = input ('Choose a Number Between 1 to 4: ')
+            choice = input('Choose a Number Between 1 to 4: ')
             try:
                 if choice == '1':
                     account_balance_check()
@@ -292,9 +357,9 @@ try:
                 else:
                     print ("Invalid Number... Select a Number Between 1 to 4")  
             except ValueError:
-                 print ('Choice should be in Number')
+                    print ('Choice should be in Number')
 except ValueError:
-                 print ('Choice should be in Number')
+                    print ('Choice should be in Number')
 
 
 
