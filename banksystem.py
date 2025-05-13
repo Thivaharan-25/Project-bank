@@ -64,12 +64,13 @@ def update_user_balance_file(user_id, password, new_balance):
         
 #===  FUNCTION FOR CREATING CUSTOMER ACCOUNT  ===#  
 def get_Customer_details():
-    user_name = input("Enter User Name: ")
+    user_name = input("Enter Customer Name: ")
     generator = customer_id_generation('C', 'user_counter.txt') 
     user_id = generator() 
-    print(f"Your Unique User ID: {user_id}") 
+    print(f"Your Unique Customer ID: {user_id}") 
 
     user_password = input("Enter User Password: ")
+    user_address = input('Enter Customer Address: ')
     datetimeprinter()
 
     try:
@@ -87,10 +88,10 @@ def get_Customer_details():
     
     user_account[user_id] = {'username': user_name, 'password': user_password, 'balance': balance}
     with open('customer.txt', 'a') as customer_file:
-        customer_file.write(f'User_ID: {user_id},')
-        customer_file.write(f'User_Name: {user_name},')
-        customer_file.write(f'User_Password: {user_password}\n')
-        # customer_file.write(f'Balance: {balance}\n')
+        customer_file.write(f'Customer_ID: {user_id},')
+        customer_file.write(f'Customer_Name: {user_name},')
+        customer_file.write(f'Customer_Password: {user_password}')
+        customer_file.write(f'Customer_Address: {user_address}\n')
     with open("transaction.txt", "a") as transaction_file:
         transaction_file.write(f'{user_id}\t| Initial Balance\t| {amount}\t|')
         datetimeprinter()
@@ -302,7 +303,6 @@ try:
                         print('================================================================================================')
                         file = open ('transaction.txt', 'r')
                         for line in file:
-                            user_data = line.strip().split('|')
                             user_data = line.strip().split('\t')
                             # print (user_data)
                             if user_data[2] == user_id :
