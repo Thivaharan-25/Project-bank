@@ -69,7 +69,7 @@ def get_Customer_details():
     user_id = generator() 
     print(f"Your Unique Customer ID: {user_id}") 
 
-    user_password = input("Enter User Password: ")
+    user_password = input("Enter Customer Password: ")
     user_address = input('Enter Customer Address: ')
     datetimeprinter()
 
@@ -105,14 +105,13 @@ def deposit():
     user_id = input("Enter your User ID: ")
     password = input("Enter your Password: ")
 
-    check = user_id_checker(user_id, password)
+    balance = user_id_checker(user_id, password)
 
-    if check is None:
+    if balance is None:
         print("❌Incorrect user ID or password.")
         return 
 
     try:
-        balance = check
         amount = int(input("Enter Deposit Amount:$ "))
         if amount <= 0:
             print("Deposit Amount should be Greater than 0")
@@ -151,14 +150,13 @@ def withdraw():
     user_id = input("Enter your User ID: ")
     password = input("Enter your Password: ")
 
-    check = user_id_checker(user_id, password)
+    balance = user_id_checker(user_id, password)
 
-    if check is None:
+    if balance is None:
         print("❌Incorrect user ID or password.")
         return 
 
     try:
-        balance = check
         amount = int(input("Enter Your Withdrawal Amount: "))
         if amount > balance:
             print("Withdrawal Failed. Amount exceeds balance.")
@@ -244,7 +242,7 @@ try:
                 break 
             else:
                 attempt += 1
-                print(f"\nLogin failed... {max_attempts - attempt} attempts remaining😞\n")
+                print(f"\nLogin failed... {max_attempts - attempt} attempts remaining\n")
 
         if not logged_in:
             print("You have been locked out due to too many failed login attempts.")
