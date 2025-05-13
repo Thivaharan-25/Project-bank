@@ -1,2 +1,0 @@
-User_ID: C001,User_Name: Navven,User_Password: 1046,User_ID: C002,User_Name: Thivaharan,User_Password: 2005
-User_ID: C003,User_Name: Siyamala,User_Password: 1972
